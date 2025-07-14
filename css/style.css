@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600&display=swap');
+
+:root {
+    --blue: #0097e6;
+    --orange: #f39c12;
+    --red: #e74c3c;
+    --white: #fff;
+    --light-color: #eee;
+    --black: #222;
+    --light-bg: #333;
+}
+
+* {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+
+*::-webkit-scrollbar {
+    height: 5px;
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--blue);
+}
+
+html {
+    font-size: 62.5%;
+    overflow-x: hidden;
+    background-color: white; 
+}
+
+body {
+    background-color: white;
+}
+
+.message {
+    position: sticky;
+    top: 0;
+    max-width: 1200px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    z-index: 1000;
+    background-color: var(--light-bg);
+    margin: 0 auto;
+}
+
+.message span {
+    color: var(--white);
+    font-size: 2rem;
+}
+
+.message i {
+    color: var(--red);
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.message i:hover {
+    color: var(--white);
+}
+
+.btn,
+.delete-btn,
+.option-btn {
+    display: block;
+    width: 100%;
+    border-radius: .5rem;
+    color: var(--white);
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 1rem;
+    text-transform: capitalize;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.btn {
+    background-color: rgb(87, 180, 0);
+}
+
+.delete-btn {
+    background-color: var(--red);
+}
+
+.option-btn {
+    background-color: var(--orange);
+}
+
+.btn:hover,
+.delete-btn:hover,
+.option-btn:hover {
+    background-color: #1b9125;
+    color: var(--black);
+}
+
+.flex-btn {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.flex-btn > * {
+    flex: 1;
+}
+
+.form-container {
+    background-color: transparent; /* changed from #789DBC */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem;
+    min-height: 50vh;
+}
+
+.form-container form {
+    width: 100%;
+    max-width: 35rem;
+    border-radius: .5rem;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.form-container form h3 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: var(--black);
+    text-transform: uppercase;
+}
+
+.form-container form .box {
+    width: 100%;
+    border-radius: .4rem;
+    padding: 1rem 1.2rem;
+    font-size: 1.6rem;
+    color: var(--black);
+    background-color: var(--light-color);
+    margin: 1rem 0;
+}
+
+.form-container form p {
+    font-size: 1.5rem;
+    color: black;
+    padding: 1rem 0;
+}
+
+.form-container form p a {
+    color: var(--red);
+}
+
+.form-container form p a:hover {
+    text-decoration: underline;
+}
+
+.profile_picture_preview {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.profile_picture_preview_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 50%;
+    }
+
+    .flex-btn {
+        flex-flow: column;
+        gap: 0;
+    }
+}
