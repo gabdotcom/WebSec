@@ -67,6 +67,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
     <a href="index.php">Dashboard</a>
     <a href="settings.php">Settings</a>
     <a href="logout.php" class="logout">Logout</a>
+    <a href="users.php">Users</a>
 </div>
 
 <div class="container">

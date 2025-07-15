@@ -5,6 +5,8 @@ class UserRegistration
 {
     private $conn;
     private $faculty_id;
+    private $encryption_key = 'your_secret_key_32chars!'; // Must be 32 bytes for AES-256
+    private $encryption_iv = 'your_iv_16_chars!';          // Must be 16 bytes for AES-256-CBC
 
     public function __construct($conn)
     {
@@ -36,7 +38,9 @@ class UserRegistration
             return ['User already exists!'];
         }
 
-        if ($this->saveUser($faculty_id, $name, $email, $hashedPassword, $user_type)) {
+        $encryptedName = $this->encrypt($name);
+
+        if ($this->saveUser($faculty_id, $encryptedName, $email, $hashedPassword, $user_type)) {
             session_start();
             session_unset();
             session_destroy();
@@ -48,6 +52,11 @@ class UserRegistration
         return ['Registration failed!'];
     }
 
+    private function encrypt($plainText)
+    {
+        return openssl_encrypt($plainText, 'AES-256-CBC', $this->encryption_key, 0, $this->encryption_iv);
+    }
+
     private function isUserExists($email)
     {
         $select = $this->conn->prepare("SELECT * FROM `users` WHERE email = ?");
@@ -55,12 +64,12 @@ class UserRegistration
         return $select->rowCount() > 0;
     }
 
-    private function saveUser($faculty_id, $name, $email, $password, $user_type)
+    private function saveUser($faculty_id, $encryptedName, $email, $password, $user_type)
     {
         $insert = $this->conn->prepare(
             "INSERT INTO `users` (faculty_id, name, email, password, user_type) VALUES (?, ?, ?, ?, ?)"
         );
-        return $insert->execute([$faculty_id, $name, $email, $password, $user_type]);
+        return $insert->execute([$faculty_id, $encryptedName, $email, $password, $user_type]);
     }
 }
 
