@@ -5,9 +5,8 @@ class UserRegistration
 {
     private $conn;
     private $faculty_id;
-    private $encryption_key = 'your_secret_key_32chars!'; // Must be 32 bytes for AES-256
-    private $encryption_iv = 'your_iv_16_chars!';          // Must be 16 bytes for AES-256-CBC
-
+    private $encryption_key = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
+    private $encryption_iv = '1234567890abcdef';       
     public function __construct($conn)
     {
         $this->conn = $conn;
@@ -17,7 +16,9 @@ class UserRegistration
     public function registerUser($data)
     {
         $faculty_id = $this->faculty_id;
-        $name = filter_var($data['name'], FILTER_SANITIZE_STRING);
+
+        // Sanitize inputs using safer alternatives
+        $name = htmlspecialchars(trim($data['name']), ENT_QUOTES, 'UTF-8');
         $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
         $user_type = isset($data['user_type']) ? $data['user_type'] : 'student';
 
@@ -25,21 +26,25 @@ class UserRegistration
             return ['Invalid user type selected!'];
         }
 
-        $pass_raw = filter_var($data['pass'], FILTER_SANITIZE_STRING);
-        $cpass_raw = filter_var($data['cpass'], FILTER_SANITIZE_STRING);
+        $pass_raw = htmlspecialchars(trim($data['pass']), ENT_QUOTES, 'UTF-8');
+        $cpass_raw = htmlspecialchars(trim($data['cpass']), ENT_QUOTES, 'UTF-8');
 
         if ($pass_raw !== $cpass_raw) {
             return ['Confirm password does not match!'];
         }
 
+        // Hash the password securely
         $hashedPassword = password_hash($pass_raw, PASSWORD_DEFAULT);
 
+        // Check if email is already in use
         if ($this->isUserExists($email)) {
             return ['User already exists!'];
         }
 
+        // Encryp using AES-256-CBC
         $encryptedName = $this->encrypt($name);
 
+        // Save user data into the database
         if ($this->saveUser($faculty_id, $encryptedName, $email, $hashedPassword, $user_type)) {
             session_start();
             session_unset();
@@ -52,6 +57,7 @@ class UserRegistration
         return ['Registration failed!'];
     }
 
+    // This method performs encryption of the name
     private function encrypt($plainText)
     {
         return openssl_encrypt($plainText, 'AES-256-CBC', $this->encryption_key, 0, $this->encryption_iv);
@@ -79,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $messages = $userRegistration->registerUser($_POST);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
